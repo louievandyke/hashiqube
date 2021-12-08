@@ -23,8 +23,8 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get --assume-yes install curl unzip jq
 if [ ! -f /usr/local/bin/vault ]; then
 
   echo -e '\e[38;5;198m'"++++ Vault not installed, installing.."
-
-  LATEST_URL=$(curl -sL https://releases.hashicorp.com/vault/index.json | jq -r '.versions[].builds[].url' | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | egrep -v 'rc|ent|beta' | egrep 'linux.*amd64' | sort -V | tail -n 1)
+  
+  LATEST_URL="https://releases.hashicorp.com/vault/1.8.5/vault_1.8.5_linux_amd64.zip"
   wget -q $LATEST_URL -O /tmp/vault.zip
 
   mkdir -p /usr/local/bin
@@ -166,6 +166,29 @@ else
   echo -e '\e[38;5;198m'"++++ Vault http://localhost:8200/ui and enter the following codes displayed below"
   echo -e '\e[38;5;198m'"++++ Vault `sudo grep Token /etc/vault/init.file`"
 fi
+
+vault status
+export VAULT_TOKEN=$(cat /etc/vault/init.file | grep Root | rev | cut -d' ' -f1 | rev)
+export VAULT_ROOT_TOKEN=$VAULT_TOKEN
+
+# Create vault policies
+vault policy write otel /vagrant/hashicorp/vault/config/otel-policy.hcl
+vault policy write nomad-server /vagrant/hashicorp/vault/config/nomad-server-policy.hcl
+vault policy write sudo /vagrant/hashicorp/vault/config/sudo-policy.hcl
+
+vault policy list
+
+# Add Nomad cluster role
+vault write /auth/token/roles/nomad-cluster @/vagrant/hashicorp/vault/config/nomad-cluster-role.json
+
+# Enable secrets engine
+vault secrets enable -version=2 kv
+
+# Retrieve Token Role based Token
+export VAULT_TOKEN_INFO=$(vault token create -policy nomad-server -period 72h -orphan -format json)
+export VAULT_TOKEN=$(echo $VAULT_TOKEN_INFO | jq .auth.client_token | tr -d '"')
+
+
 # check vault status
 # vault status
 

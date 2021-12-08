@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function nomad-install() {
+echo -e '\e[38;5;198m'"++++ make sure you have the License in this path hashicorp/nomad/nomad.hclic"
 sudo DEBIAN_FRONTEND=noninteractive apt-get --assume-yes install curl unzip jq
 yes | sudo docker system prune -a
 yes | sudo docker system prune --volumes
@@ -22,6 +23,7 @@ advertise {
 server {
   enabled          = true
   bootstrap_expect = 1
+  license_path     = "/data/hashicorp/nomad/nomad.hclic"
 }
 
 client {
@@ -37,6 +39,14 @@ client {
   }
 }
 
+plugin "docker" {
+  config {
+    auth {
+      config = "/etc/docker/dockercfg.json"
+    }
+  }
+}
+
 plugin "raw_exec" {
   config {
     enabled = true
@@ -46,7 +56,33 @@ plugin "raw_exec" {
 consul {
   address = "${VAGRANT_IP}:8500"
 }
+
+vault {
+  enabled = true
+  address = "http://${VAGRANT_IP}:8200"
+  task_token_ttl = "1h"
+  create_from_role = "nomad-cluster"
+  token = "${VAULT_TOKEN}"
+  tls_skip_verify = true
+}
 EOF
+
+# Base64-encode password
+chmod +x /vagrant/hashicorp/nomad/secret.sh
+cd /vagrant/hashicorp/nomad
+. ./secret.sh
+export GH_AUTH_B64=$(echo "${GH_USER}:${GH_TOKEN}" | tr -d '[[:space:]]' | base64)
+mkdir -p /etc/docker
+cat <<EOF | sudo tee /etc/docker/dockercfg.json
+{
+  "auths" : {
+    "ghcr.io" : {
+      "auth": "${GH_AUTH_B64}"
+    }
+  }
+}
+EOF
+
   # check if nomad is installed, start and exit
   if [ -f /usr/local/bin/nomad ]; then
     echo -e '\e[38;5;198m'"++++ Nomad already installed at /usr/local/bin/nomad"
@@ -72,7 +108,7 @@ EOF
   else
   # if nomad is not installed, download and install
     echo -e '\e[38;5;198m'"++++ Nomad not installed, installing.."
-    LATEST_URL=$(curl -sL https://releases.hashicorp.com/nomad/index.json | jq -r '.versions[].builds[].url' | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | egrep -v 'rc|beta' | egrep 'linux.*amd64' | sort -V | tail -n 1)
+    LATEST_URL="https://releases.hashicorp.com/nomad/1.1.3/nomad_1.1.3_linux_amd64.zip"
     wget -q $LATEST_URL -O /tmp/nomad.zip
     mkdir -p /usr/local/bin
     (cd /usr/local/bin && unzip /tmp/nomad.zip)
@@ -93,14 +129,11 @@ EOF
     nomad node status
   fi
 cd /vagrant/hashicorp/nomad/jobs;
-nomad plan --address=http://localhost:4646 countdashboard.nomad
-nomad run --address=http://localhost:4646 countdashboard.nomad
-nomad plan --address=http://localhost:4646 countdashboardtest.nomad
-nomad run --address=http://localhost:4646 countdashboardtest.nomad
-nomad plan --address=http://localhost:4646 fabio.nomad
-nomad run --address=http://localhost:4646 fabio.nomad
-# curl -v -H 'Host: fabio.service.consul' http://${VAGRANT_IP}:9999/
-echo -e '\e[38;5;198m'"++++ Nomad http://localhost:4646"
+
+
+# Traefik Job and sample app (see: https://learn.hashicorp.com/tutorials/nomad/load-balancing-traefik)
+nomad job run traefik.nomad
+
 }
 
 nomad-install
