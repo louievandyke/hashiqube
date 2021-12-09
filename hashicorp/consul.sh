@@ -97,14 +97,14 @@ EOF
     consul members
     consul info
   fi
-echo -e '\e[38;5;198m'"++++ Adding Consul KV data for Fabio Load Balancer Routes"
-consul kv put fabio/config/vault1 "route add vault vault.service.consul:9999/ http://${VAGRANT_IP}:8200"
-consul kv put fabio/config/vault2 "route add vault fabio.service.consul:9999/vault http://${VAGRANT_IP}:8200 opts \"strip=/vault\""
-consul kv put fabio/config/nomad "route add nomad nomad.service.consul:9999/ http://${VAGRANT_IP}:4646"
-consul kv put fabio/config/consul "route add consul consul.service.consul:9999/ http://${VAGRANT_IP}:8500"
-consul kv put fabio/config/apache2 "route add apache2 fabio.service.consul:9999/apache2 http://${VAGRANT_IP}:8889 opts \"strip=/apache2\""
-consul kv put fabio/config/countdashtest1 "route add countdashtest fabio.service.consul:9999/countdashtest http://${VAGRANT_IP}:9022/ opts \"strip=/countdashtest\""
-consul kv put fabio/config/docsify "route add docsify docsify.service.consul:9999/ http://${VAGRANT_IP}:3333"
+# echo -e '\e[38;5;198m'"++++ Adding Consul KV data for Fabio Load Balancer Routes"
+# consul kv put fabio/config/vault1 "route add vault vault.service.consul:9999/ http://${VAGRANT_IP}:8200"
+# consul kv put fabio/config/vault2 "route add vault fabio.service.consul:9999/vault http://${VAGRANT_IP}:8200 opts \"strip=/vault\""
+# consul kv put fabio/config/nomad "route add nomad nomad.service.consul:9999/ http://${VAGRANT_IP}:4646"
+# consul kv put fabio/config/consul "route add consul consul.service.consul:9999/ http://${VAGRANT_IP}:8500"
+# consul kv put fabio/config/apache2 "route add apache2 fabio.service.consul:9999/apache2 http://${VAGRANT_IP}:8889 opts \"strip=/apache2\""
+# consul kv put fabio/config/countdashtest1 "route add countdashtest fabio.service.consul:9999/countdashtest http://${VAGRANT_IP}:9022/ opts \"strip=/countdashtest\""
+# consul kv put fabio/config/docsify "route add docsify docsify.service.consul:9999/ http://${VAGRANT_IP}:3333"
 echo -e '\e[38;5;198m'"++++ Consul http://localhost:8500"
 }
 

@@ -171,15 +171,14 @@ vault status
 export VAULT_TOKEN=$(cat /etc/vault/init.file | grep Root | rev | cut -d' ' -f1 | rev)
 export VAULT_ROOT_TOKEN=$VAULT_TOKEN
 
-# Create vault policies
-vault policy write otel /vagrant/hashicorp/vault/config/otel-policy.hcl
+# Create the Nomad server vault policy
 vault policy write nomad-server /vagrant/hashicorp/vault/config/nomad-server-policy.hcl
-vault policy write sudo /vagrant/hashicorp/vault/config/sudo-policy.hcl
-
-vault policy list
 
 # Add Nomad cluster role
 vault write /auth/token/roles/nomad-cluster @/vagrant/hashicorp/vault/config/nomad-cluster-role.json
+
+# Create the OTel Collector policy
+vault policy write otel /vagrant/hashicorp/vault/config/otel-policy.hcl
 
 # Enable secrets engine
 vault secrets enable -version=2 kv
@@ -187,58 +186,4 @@ vault secrets enable -version=2 kv
 # Retrieve Token Role based Token
 export VAULT_TOKEN_INFO=$(vault token create -policy nomad-server -period 72h -orphan -format json)
 export VAULT_TOKEN=$(echo $VAULT_TOKEN_INFO | jq .auth.client_token | tr -d '"')
-
-
-# check vault status
-# vault status
-
-# replace “s.BOKlKvEAxyn5OS0LvfhzvBur” with your Initial Root Token stored in the /etc/vault/init.file file
-# export VAULT_TOKEN="s.RcW0LuNIyCoTLWxrDPtUDkCw"
-
-# enable approle authentication
-# vault auth enable approle
-# Success! Enabled approle auth method at: approle/
-
-# same command can be used for other Authentication methods, e.g
-
-# vault auth enable kubernetes
-# Success! Enabled kubernetes auth method at: kubernetes/
-
-# vault auth enable userpass
-# Success! Enabled userpass auth method at: userpass/
-
-# vault auth enable ldap
-# Success! Enabled ldap auth method at: ldap/
-
-# list all Authentication methods using the command
-# vault auth list
-
-# get secret engine path:
-# vault secrets list
-
-# write a secret to your kv secret engine.
-# vault kv put secret/databases/db1 username=DBAdmin
-# Success! Data written to: secret/databases/db1
-
-# vault kv put secret/databases/db1 password=StrongPassword
-# Success! Data written to: secret/databases/db1
-
-# you can even use single line command to write multiple data.
-# vault kv put secret/databases/db1 username=DBAdmin password=StrongPassword
-# Success! Data written to: secret/databases/db1
-
-# to get a secret, use vault get command.
-# vault kv get secret/databases/db1
-
-# get data in json format:
-# vault kv get -format=json secret/databases/db1
-
-# to print only the value of a given field, use:
-# vault kv get -field=username  secret/databases/db1
-
-# to delete a Secret, use:
-# vault kv delete secret/databases/db1
-# Success! Data deleted (if it existed) at: secret/databases/db1
-
-# vault kv get   secret/databases/db1
-# No value found at secret/databases/db1
+echo "The Token Role Based Token is" $VAULT_TOKEN

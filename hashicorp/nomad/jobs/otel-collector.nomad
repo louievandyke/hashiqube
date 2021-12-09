@@ -32,7 +32,7 @@ job "otel-collector-gateway" {
 
     service {
       tags = [
-        "traefik.http.routers.collector.rule=Host(`otel-collector-http.local`)",
+        "traefik.http.routers.collector.rule=Host(`otel-collector-http.localhost`)",
         "traefik.http.routers.collector.entrypoints=web",
         "traefik.http.routers.collector.tls=false",
         "traefik.enable=true",
@@ -108,11 +108,12 @@ exporters:
     endpoint: "api.honeycomb.io:443"
     headers: 
       "x-honeycomb-team": "{{ with secret "kv/data/otel/o11y/honeycomb" }}{{ .Data.data.api_key }}{{ end }}"
-      "x-honeycomb-dataset": "av-collector-test"
+      "x-honeycomb-dataset": "hny-otel-collector"
   otlp/ls:
     endpoint: ingest.lightstep.com:443
     headers: 
       "lightstep-access-token": "{{ with secret "kv/data/otel/o11y/lightstep" }}{{ .Data.data.api_key }}{{ end }}"
+
   datadog:
     service: dd_trace_example
     tags:

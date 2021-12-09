@@ -1,7 +1,6 @@
 #!/bin/bash
 
 function nomad-install() {
-echo -e '\e[38;5;198m'"++++ make sure you have the License in this path hashicorp/nomad/nomad.hclic"
 sudo DEBIAN_FRONTEND=noninteractive apt-get --assume-yes install curl unzip jq
 yes | sudo docker system prune -a
 yes | sudo docker system prune --volumes
@@ -23,7 +22,6 @@ advertise {
 server {
   enabled          = true
   bootstrap_expect = 1
-  license_path     = "/data/hashicorp/nomad/nomad.hclic"
 }
 
 client {

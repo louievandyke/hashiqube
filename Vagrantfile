@@ -23,7 +23,7 @@ vbox_config = [
 machines = [
   {
     :name => "hashiqube.#{fqdn}",
-    :ip => '10.9.99.10',
+    :ip => '192.168.56.100',
     :ssh_port => '2255',
     :vbox_config => vbox_config,
     :synced_folders => [
@@ -126,7 +126,7 @@ Vagrant::configure("2") do |config|
 
       # install docker
       # vagrant up --provision-with docker to only run this on vagrant up
-      config.vm.provision "docker", type: "shell", preserve_order: true, privileged: true, path: "hashicorp/docker.sh"
+      config.vm.provision "docker", type: "shell", preserve_order: true, privileged: true, path: "docker/docker.sh"
 
       # install nomad
       # vagrant up --provision-with nomad to only run this on vagrant up
