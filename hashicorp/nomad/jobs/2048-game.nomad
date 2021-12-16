@@ -5,6 +5,10 @@ job "2048-game" {
   group "game" {
     count = 1 # number of instances
 
+    vault {
+      policies  = ["2048-game"]
+    }
+
     network {
       mode = "bridge"
 
@@ -43,6 +47,15 @@ job "2048-game" {
         cpu    = 500 # MHz
         memory = 256 # MB
       }
+
+      template {
+        data   = <<EOF
+
+my secret: "{{ with secret "kv/data/2048-game/stuff" }}{{ .Data.data.greeting }}{{ end }}"
+
+EOF
+        destination = "local/2048-game.txt"
+      }      
     }
   }
 }

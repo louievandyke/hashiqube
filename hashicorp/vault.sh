@@ -174,16 +174,17 @@ export VAULT_ROOT_TOKEN=$VAULT_TOKEN
 # Create the Nomad server vault policy
 vault policy write nomad-server /vagrant/hashicorp/vault/config/nomad-server-policy.hcl
 
+# Create app-specific poliies
+vault policy write otel /vagrant/hashicorp/vault/config/otel-policy.hcl
+vault policy write 2048-game /vagrant/hashicorp/vault/config/2048-policy.hcl
+
 # Add Nomad cluster role
 vault write /auth/token/roles/nomad-cluster @/vagrant/hashicorp/vault/config/nomad-cluster-role.json
-
-# Create the OTel Collector policy
-vault policy write otel /vagrant/hashicorp/vault/config/otel-policy.hcl
-
-# Enable secrets engine
-vault secrets enable -version=2 kv
 
 # Retrieve Token Role based Token
 export VAULT_TOKEN_INFO=$(vault token create -policy nomad-server -period 72h -orphan -format json)
 export VAULT_TOKEN=$(echo $VAULT_TOKEN_INFO | jq .auth.client_token | tr -d '"')
 echo "The Token Role Based Token is" $VAULT_TOKEN
+
+# Enable secrets engine
+vault secrets enable -version=2 kv
