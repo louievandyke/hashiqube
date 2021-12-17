@@ -33,11 +33,28 @@ To get started:
     cd hashiqube
     vagrant up
     ```
+
+3. Access the Hashi tools
+
+    The following tools are now accessible from your host machine
+
+    * Vault: http://localhost:8200
+    * Nomad: http://localhost:4646
+    * Consul: http://localhost:8500
+    * Traefik: http://traefik.localhost
+
+    If you'd like to SSH into the HashiQube VM, you can do so by running the following from a terminal window on your host machine.
+
+    ```bash
+    vagrant ssh
+    ```
+
 ## Detailed How-To Guides
 
-For detailed tutorials, please see the following blog posts on Medium:
+For detailed tutorials that use this repo, please see the following blog posts on Medium:
 * [Just-in-Time Nomad: Running Traefik on Nomad with HashiQube](https://adri-v.medium.com/just-in-time-nomad-running-traefik-on-hashiqube-7d6dfd8ef9d8)
 * [Just-in-Time Nomad: Running the OpenTelemetry Collector on Hashicorp Nomad with HashiQube](https://adri-v.medium.com/just-in-time-nomad-running-the-opentelemetry-collector-on-hashicorp-nomad-with-hashiqube-4eaf009b8382)
+* [Just-in-Time Nomad: Configuring Nomad/Vault Integration on HashiQube](https://adri-v.medium.com/just-in-time-nomad-configuring-hashicorp-nomad-vault-integration-on-hashiqube-388c14cb070a)
 
 ## Gotchas
 
