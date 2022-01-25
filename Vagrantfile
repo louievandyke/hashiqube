@@ -151,7 +151,7 @@ Vagrant::configure("2") do |config|
         echo -e '\e[38;5;198m'"Consul admin console http://localhost:8500"
         echo -e '\e[38;5;198m'"Nomad admin console http://localhost:4646"
         echo -e '\e[38;5;198m'"Traefik dashboard http://traefik.localhost"
-        echo -e '\e[38;5;198m'"Waypoint Server https://${VAGRANT_IP}:9702 with $(cat /home/vagrant/waypoint_user_token.txt)"
+        echo -e '\e[38;5;198m'"Waypoint Server https://${VAGRANT_IP}:9702 with $(cat /vagrant/hashicorp/waypoint/waypoint_user_token.txt)"
       SHELL
 
     end

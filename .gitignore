@@ -19,3 +19,5 @@ hashicorp/packer/windows/ansible/connection_plugins/__pycache__**
 *secret*
 settings.json
 token.txt
+waypoint_user_token.txt
+.waypoint
