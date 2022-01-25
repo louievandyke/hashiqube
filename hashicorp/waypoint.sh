@@ -4,8 +4,6 @@
 
 function waypoint-install() {
   sudo DEBIAN_FRONTEND=noninteractive apt-get --assume-yes install curl unzip jq
-  # yes | sudo docker system prune -a
-  # yes | sudo docker system prune --volumes
   # check if waypoint is installed, start and exit
   if [ -f /usr/local/bin/waypoint ]; then
     echo -e '\e[38;5;198m'"++++ Waypoint already installed at /usr/local/bin/waypoint"
@@ -19,10 +17,7 @@ function waypoint-install() {
     (cd /usr/local/bin && unzip /tmp/waypoint.zip)
     echo -e '\e[38;5;198m'"++++ Installed `/usr/local/bin/waypoint version`"
   fi
-  # echo -e '\e[38;5;198m'"++++ Docker pull Waypoint Server container"
-  # docker pull hashicorp/waypoint:latest
-  # docker stop waypoint-server
-  # docker rm waypoint-server
+
   echo -e '\e[38;5;198m'"++++ Waypoint Server starting"
   export NOMAD_ADDR='http://localhost:4646'
   waypoint install -platform=nomad -nomad-dc=dc1 -accept-tos -nomad-host-volume="mysql"
