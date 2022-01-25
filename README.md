@@ -42,7 +42,7 @@ To get started:
     * Nomad: http://localhost:4646
     * Consul: http://localhost:8500
     * Traefik: http://traefik.localhost
-    * Waypoint: https://${VAGRANT_IP}:9702 (Get the login token by logging into the guest machine using `vagrant ssh` and running `cat /home/vagrant/waypoint_user_token.txt`)
+    * Waypoint: https://${VAGRANT_IP}:9702 (Get the login token by logging into the guest machine using `vagrant ssh` and running `cat ./hashicorp/waypoint/waypoint_user_token.txt` from repo root)
 
     If you'd like to SSH into the HashiQube VM, you can do so by running the following from a terminal window on your host machine.
 
@@ -78,7 +78,7 @@ After Waypoint is bootstrapped, you can log in by:
 
 ```
 waypoint login \
-    -token=$(cat /home/vagrant/waypoint_user_token.txt) \
+    -token=$(cat ./hashicorp/waypoint/waypoint_user_token.txt) \
     ${VAGRANT_IP}
 
 waypoint context verify
