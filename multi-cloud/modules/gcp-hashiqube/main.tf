@@ -60,7 +60,7 @@ resource "google_compute_instance_template" "hashiqube" {
   description          = var.gcp_cluster_description
   instance_description = var.gcp_cluster_description
   machine_type         = var.gcp_machine_type
-  tags                 = list(var.gcp_cluster_tag_name)
+  tags                 = tolist([var.gcp_cluster_tag_name])
   scheduling {
     automatic_restart   = true
     on_host_maintenance = "MIGRATE"

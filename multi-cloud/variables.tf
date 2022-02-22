@@ -6,7 +6,7 @@ variable "deploy_to_aws" {
 
 variable "deploy_to_gcp" {
   type        = bool
-  default     = false
+  default     = true
   description = "Deploy Hashiqube on GCP"
 }
 
@@ -19,12 +19,12 @@ variable "deploy_to_azure" {
 variable "whitelist_cidr" {
   description = "Additional CIDR to whitelist"
   type        = string
-  default     = "20.191.210.171/32" # Example: 0.0.0.0/0
+  default     = "72.197.151.110/32" # Example: 0.0.0.0/0
 }
 
 variable "ssh_public_key" {
   type        = string
-  default     = "~/.ssh/id_rsa.pub"
+  default     = "~/pk-ssh-rsa.pem"
   description = "SSH public key"
 }
 
@@ -54,7 +54,7 @@ variable "aws_profile" {
 
 variable "aws_region" {
   type        = string
-  default     = "ap-southeast-2"
+  default     = "us-east-1"
   description = "The region in which all AWS resources will be launched"
 }
 
@@ -66,25 +66,25 @@ variable "aws_instance_type" {
 
 variable "gcp_credentials" {
   type    = string
-  default = "~/.gcp/credentials.json"
+  default = "~/account.json"
 }
 
 variable "gcp_project" {
   type        = string
-  default     = "thermal-formula-256223"
+  default     = "lvd-nomad"
   description = "GCP project ID"
 }
 
 variable "gcp_region" {
   type        = string
   description = "The region in which all GCP resources will be launched"
-  default     = "australia-southeast1"
+  default     = "us-east1"
 }
 
 variable "gcp_account_id" {
   type        = string
   description = "Account ID"
-  default     = "sa-consul-compute-prod"
+  default     = "hashiqube"
 }
 
 variable "gcp_cluster_name" {
@@ -107,7 +107,7 @@ variable "gcp_cluster_tag_name" {
 
 variable "gcp_cluster_size" {
   type        = number
-  default     = 1
+  default     = 2
   description = "size of the cluster"
 }
 
@@ -116,9 +116,9 @@ variable "gcp_zones" {
   description = "The zones accross which GCP resources will be launched"
 
   default = [
-    "australia-southeast1-a",
-    "australia-southeast1-b",
-    "australia-southeast1-c",
+    "us-east1-b",
+    "us-east1-c",
+    "us-east1-d",
   ]
 }
 

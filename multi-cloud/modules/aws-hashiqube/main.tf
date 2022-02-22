@@ -94,7 +94,7 @@ resource "aws_instance" "hashiqube" {
 }
 
 resource "aws_key_pair" "hashiqube" {
-  key_name   = "hashiqube"
+  key_name   = "pk-ssh-rsa"
   public_key = file(var.ssh_public_key)
 }
 

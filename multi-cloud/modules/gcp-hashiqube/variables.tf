@@ -16,7 +16,9 @@ variable "my_ipaddress" {}
 
 variable "vault" {}
 
-variable "gcp_project" {}
+variable "gcp_project" {
+    default = "lvd-nomad"
+}
 
 variable "gcp_credentials" {}
 
