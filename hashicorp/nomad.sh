@@ -112,7 +112,7 @@ EOF
   else
   # if nomad is not installed, download and install
     echo -e '\e[38;5;198m'"++++ Nomad not installed, installing.."
-    LATEST_URL="https://releases.hashicorp.com/nomad/1.1.3/nomad_1.1.3_linux_amd64.zip"
+    LATEST_URL="curl -sL https://releases.hashicorp.com/nomad/index.json | jq -r '.versions[].builds[].url' | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | egrep -v 'rc|ent|beta' | egrep 'linux.*amd64' | sort -V | tail -1"
     wget -q $LATEST_URL -O /tmp/nomad.zip
     mkdir -p /usr/local/bin
     (cd /usr/local/bin && unzip /tmp/nomad.zip)
